@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fil">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#214E46">
+<title>AP10 Term 2 Week 2 Interactive Reviewer</title>
+<style>
+:root{
+  --green:#214E46;--green2:#2E6A5E;--rust:#A6533E;--gold:#D6A23A;
+  --paper:#FFFDF7;--ink:#202B2A;--muted:#68736F;--good:#24784D;--bad:#B34242;--line:#D9D0BE;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;color:var(--ink);font-family:Arial,Helvetica,sans-serif;min-height:100vh;
+ background:
+ radial-gradient(circle at 10% 0%,rgba(46,106,94,.13),transparent 31%),
+ linear-gradient(145deg,#eee9dc,#fffaf0 51%,#f2e8df);
+}
+header{
+ padding:26px 16px;color:#fff;border-bottom:5px solid var(--gold);
+ background:linear-gradient(112deg,var(--green),var(--green2) 62%,var(--rust));
+}
+.wrap,main{max-width:1120px;margin:auto}
+.headrow{display:flex;gap:13px;align-items:center}
+.ap10{
+ width:58px;height:58px;border:2px solid rgba(255,255,255,.95);border-radius:50%;
+ display:grid;place-items:center;font:900 .95rem Georgia,serif;color:#ffe3a5;background:rgba(0,0,0,.08)
+}
+h1{font:700 clamp(1.55rem,4vw,2.5rem)/1.1 Georgia,serif;margin:0}
+header p{margin:.45rem 0 0;opacity:.94}
+main{padding:20px 15px 50px}
+.panel,.session-card{
+ background:rgba(255,253,247,.98);border:1px solid var(--line);border-radius:19px;
+ box-shadow:0 10px 26px rgba(34,59,52,.09)
+}
+.panel{padding:18px;margin-bottom:18px}
+.top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.namebox{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+input{border:1px solid #bdb29f;border-radius:11px;padding:10px 12px;font-size:1rem;min-width:230px}
+button,.action{
+ border:0;border-radius:12px;padding:11px 14px;font-weight:800;text-decoration:none;cursor:pointer;
+ display:inline-flex;align-items:center;justify-content:center;text-align:center
+}
+button:hover,.action:not(.disabled):hover{filter:brightness(1.05);transform:translateY(-1px)}
+.btn{background:var(--green);color:#fff}.btn.gold{background:var(--gold);color:#2b220e}
+.btn.light{background:#eee8dc;color:#443d33}.btn.red{background:var(--bad);color:#fff}
+.intro h2{font-family:Georgia,serif;color:var(--green);margin:0}
+.sessions{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.session-card{padding:19px;position:relative;overflow:hidden}
+.session-card:before{
+ content:"";position:absolute;left:0;right:0;top:0;height:6px;
+ background:linear-gradient(90deg,var(--green),var(--green2),var(--gold),var(--rust))
+}
+.session-tag{
+ display:inline-block;margin-top:7px;background:var(--green);color:#fff;padding:6px 10px;
+ border-radius:999px;font-size:.8rem;font-weight:900;letter-spacing:.04em
+}
+.session-card h2{font:700 1.28rem/1.25 Georgia,serif;color:var(--green);margin:13px 0 16px}
+.link-stack{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.action.youtube{background:#B72F2F;color:#fff}
+.action.practice{background:var(--rust);color:#fff}
+.action.disabled{opacity:.5;cursor:not-allowed}
+.session-status{margin-top:13px;padding:9px 10px;background:#efece3;border-radius:10px;font-size:.83rem;color:#535d58}
+.hidden{display:none!important}
+.quizhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.badge{display:inline-block;background:#e8eee8;color:#355048;border-radius:999px;padding:5px 9px;font-size:.78rem;font-weight:900}
+.badge.final{background:#fff0c9;color:#73500b;border:1px solid #dfb85b}
+.quiz-title{font-family:Georgia,serif;color:var(--green);margin:7px 0 0}
+.timerbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:13px 0 7px}
+.timer{background:#efeee7;border:1px solid #d8d2c5;border-radius:999px;padding:7px 10px;font-size:.87rem}
+.timer strong{color:var(--green);font-variant-numeric:tabular-nums}
+.progress{height:10px;background:#e4dfd5;border-radius:99px;overflow:hidden;margin:12px 0}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--rust),var(--green2))}
+.phase{margin:12px 0 2px;font-size:.82rem;font-weight:900;color:var(--green)}
+.qnum{font-weight:900;color:var(--rust);margin:8px 0 7px}
+.question{font-weight:800;font-size:1.12rem;line-height:1.52;text-align:left;white-space:pre-line}
+.options{display:grid;gap:9px;margin-top:15px;text-align:left}
+.opt{
+ width:100%;background:#fff;border:1px solid #cfc6b6;border-radius:13px;padding:12px 13px;
+ display:flex;gap:10px;justify-content:flex-start;align-items:flex-start;text-align:left;
+ color:var(--ink);font-weight:650;line-height:1.42
+}
+.opt span:last-child{flex:1;display:block;text-align:left}
+.opt .letter{
+ flex:0 0 28px;height:28px;border-radius:50%;background:#eee9de;
+ display:grid;place-items:center;color:var(--green);font-weight:900
+}
+.opt.correct{background:#dff2e7;border-color:#5aa378}
+.opt.wrong{background:#fae1e1;border-color:#c46b6b}
+.opt:disabled{cursor:default}
+.feedback{margin-top:13px;padding:12px;border-radius:11px;font-weight:750;line-height:1.45}
+.feedback.ok{background:#e0f3e8;color:#155b39;border:1px solid #9bc9ad}
+.feedback.no{background:#f8e1e1;color:#7c2020;border:1px solid #ddb0b0}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.score{font:700 clamp(2.5rem,7vw,4rem) Georgia,serif;color:var(--green);margin:5px 0}
+.metrics{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.metric{background:#efece4;border-radius:10px;padding:8px 10px;font-size:.88rem}
+.mistake{border-left:4px solid var(--bad);background:#fff2f2;padding:10px 12px;border-radius:8px;margin:8px 0;line-height:1.45}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th,td{padding:9px 7px;border-bottom:1px solid #ddd6c9;text-align:left;vertical-align:top}
+th{background:#eee9df;color:var(--green)}
+.tablewrap{overflow:auto}
+.note{background:#fff1cf;border-left:5px solid var(--gold);padding:11px 13px;border-radius:9px;line-height:1.45}
+footer{text-align:center;padding:25px;color:#6d756f;font-size:.82rem}
+@media(max-width:600px){
+ .sessions{grid-template-columns:1fr}.link-stack{grid-template-columns:1fr}
+ input{width:100%;min-width:0}.namebox{width:100%}
+}
+</style>
+</head>
+<body>
+<header>
+<div class="wrap headrow">
+ <div class="ap10">AP10</div>
+ <div><h1>TERM 2 • WEEK 2 INTERACTIVE REVIEWER</h1><p>5 Sesyon • YouTube Lesson + Interactive Practice</p></div>
+</div>
+</header>
+
+<main>
+<section id="home">
+ <div class="panel top">
+   <div class="namebox">
+     <strong>Pangalan:</strong>
+     <input id="studentName" type="text" placeholder="Ilagay ang pangalan">
+     <button class="btn light" id="saveNameBtn">I-save</button>
+   </div>
+   <button class="btn gold" id="dashboardBtn">Parent Dashboard</button>
+ </div>
+
+ <div class="panel intro"><h2>Pumili ng Sesyon</h2></div>
+ <div class="sessions">
+<article class="session-card"><div class="session-tag">SESYON 1</div><h2>Ang Graft and Corruption</h2><div class="link-stack"><a class="action youtube" href="https://youtu.be/YICLtrlyr6w" target="_blank" rel="noopener noreferrer">▶ YouTube Lesson</a><a class="action practice" href="#quiz" data-practice="d1">✎ Interactive Practice</a></div><div class="session-status" id="status-d1">Wala pang attempt.</div></article><article class="session-card"><div class="session-tag">SESYON 2</div><h2>Ang Anti-Graft and Corrupt Practices Act</h2><div class="link-stack"><a class="action youtube" href="https://youtu.be/Pyi8KEE-PKQ" target="_blank" rel="noopener noreferrer">▶ YouTube Lesson</a><a class="action practice" href="#quiz" data-practice="d2">✎ Interactive Practice</a></div><div class="session-status" id="status-d2">Wala pang attempt.</div></article><article class="session-card"><div class="session-tag">SESYON 3</div><h2>Graft and Corruption sa Pilipinas</h2><div class="link-stack"><a class="action youtube" href="https://youtu.be/8CdaTWHQL6c" target="_blank" rel="noopener noreferrer">▶ YouTube Lesson</a><a class="action practice" href="#quiz" data-practice="d3">✎ Interactive Practice</a></div><div class="session-status" id="status-d3">Wala pang attempt.</div></article><article class="session-card"><div class="session-tag">SESYON 4</div><h2>Epekto ng Graft and Corruption</h2><div class="link-stack"><a class="action youtube" href="https://youtu.be/_0hCqtaxuu4" target="_blank" rel="noopener noreferrer">▶ YouTube Lesson</a><a class="action practice" href="#quiz" data-practice="d4">✎ Interactive Practice</a></div><div class="session-status" id="status-d4">Wala pang attempt.</div></article><article class="session-card"><div class="session-tag">SESYON 5</div><h2>Paglutas sa Graft and Corruption</h2><div class="link-stack"><span class="action youtube disabled" aria-disabled="true">▶ YouTube — To Follow</span><a class="action practice" href="#quiz" data-practice="d5">✎ Interactive Practice</a></div><div class="session-status" id="status-d5">Wala pang attempt.</div></article>
+</div>
+</section>
+
+<section id="quiz" class="hidden">
+ <div class="panel">
+   <div class="quizhead">
+     <div><span id="quizBadge" class="badge"></span><h2 id="quizTitle" class="quiz-title"></h2></div>
+     <button class="btn light" id="homeFromQuiz">Home</button>
+   </div>
+   <div class="timerbar">
+     <span class="timer">⏱ Buong Review: <strong id="totalTimer">00:00</strong></span>
+     <span class="timer">Item: <strong id="itemTimer">00:00</strong></span>
+   </div>
+   <div class="progress"><span id="progressBar"></span></div>
+   <div id="questionArea"></div>
+ </div>
+</section>
+
+<section id="result" class="hidden">
+ <div class="panel">
+   <span class="badge">RESULTA</span>
+   <h2 id="resultTitle" class="quiz-title"></h2>
+   <div id="score" class="score"></div>
+   <div id="metrics" class="metrics"></div>
+   <div id="mistakes"></div>
+   <div class="row">
+     <button class="btn" id="repeatBtn">Ulitin ang Sesyon</button>
+     <button class="btn red" id="mistakesBtn">Ulitin ang Mali</button>
+     <button class="btn light" id="homeFromResult">Home</button>
+   </div>
+ </div>
+</section>
+
+<section id="dashboard" class="hidden">
+ <div class="panel">
+   <div class="quizhead">
+     <div><span class="badge">PARENT VIEW</span><h2 class="quiz-title">Progress Dashboard</h2></div>
+     <button class="btn light" id="homeFromDash">Home</button>
+   </div>
+   <p id="dashStudent"></p>
+   <div id="dashSummary" class="note"></div>
+   <div class="tablewrap" style="margin-top:14px">
+     <table>
+       <thead><tr><th>Sesyon</th><th>Latest</th><th>Best</th><th>Attempts</th><th>Average</th><th>Total Time</th><th>Mali</th><th>Practice</th></tr></thead>
+       <tbody id="dashRows"></tbody>
+     </table>
+   </div>
+   <div class="row">
+     <button class="btn gold" id="csvBtn">I-download ang Progress (CSV)</button>
+     <button class="btn red" id="resetBtn">Reset Progress</button>
+   </div>
+ </div>
+</section>
+</main>
+
+<footer>AP10 Term 2 Week 2 Interactive Reviewer • GitHub-ready</footer>
+
+<script>
+var DATA={"days": {"d1": {"short": "Sesyon 1", "title": "Ang Graft and Corruption", "youtube": "https://youtu.be/YICLtrlyr6w", "practice": [{"q": "Anong termino ang tumutukoy sa mas malawak na maling paggamit o pagtalikod sa pampublikong tungkulin?", "options": ["Corruption", "Graft", "Bribery", "Extortion"], "answer": "Corruption", "activity": "INTERACTIVE PRACTICE"}, {"q": "Anong termino ang isang uri ng corruption na may malinaw na diin sa pera, gain, advantage, o pansariling pakinabang?", "options": ["Graft", "Corruption", "Public trust", "Nepotismo"], "answer": "Graft", "activity": "INTERACTIVE PRACTICE"}, {"q": "Alin ang pinakamainam na paglalarawan sa graft?", "options": ["Pakinabang na nakukuha sa hindi tapat o kuwestiyonableng paggamit ng posisyon o impluwensiya", "Anumang pagkakamali sa opisyal na dokumento", "Bawat paglabag na walang personal na pakinabang", "Simpleng paglabag sa patakaran kahit walang kapangyarihang ginamit"], "answer": "Pakinabang na nakukuha sa hindi tapat o kuwestiyonableng paggamit ng posisyon o impluwensiya", "activity": "INTERACTIVE PRACTICE"}, {"q": "Kapag ang isang opisyal ay tumanggap ng lagay kapalit ng pabor sa transaksiyon, anong kaugnay na gawain ang inilalarawan?", "options": ["Bribery", "Nepotismo", "Collusion", "Transparency"], "answer": "Bribery", "activity": "INTERACTIVE PRACTICE"}, {"q": "Anong tawag sa pagbibigay ng hindi nararapat na pabor dahil sa ugnayang pampamilya?", "options": ["Nepotismo", "Extortion", "Corruption Perceptions Index", "Accountability"], "answer": "Nepotismo", "activity": "INTERACTIVE PRACTICE"}, {"q": "Anong tawag sa pagkuha o paghingi ng pakinabang gamit ang kapangyarihan o pamimilit?", "options": ["Extortion", "Bribery", "Merit system", "Public trust"], "answer": "Extortion", "activity": "INTERACTIVE PRACTICE"}, {"q": "Anong konsepto ang tumutukoy sa pagsasama o pagkakasundo ng dalawa o higit pang tao upang maisagawa ang maling gawain?", "options": ["Pakikipagsabwatan / Collusion", "Due process", "Integrity check", "Disclosure"], "answer": "Pakikipagsabwatan / Collusion", "activity": "INTERACTIVE PRACTICE"}, {"q": "Anong batas ang kilala bilang \"Anti-Graft and Corrupt Practices Act\"?", "options": ["Republic Act No. 3019", "Republic Act No. 6713", "Executive Order No. 43, s. 2011", "Local Government Code"], "answer": "Republic Act No. 3019", "activity": "INTERACTIVE PRACTICE"}, {"q": "Alin ang hindi karaniwang iniuugnay sa graft and corruption?", "options": ["Wastong paggamit ng pampublikong pondo", "Maling paggamit ng posisyon", "Pansariling pakinabang", "Hindi nararapat na pabor"], "answer": "Wastong paggamit ng pampublikong pondo", "activity": "INTERACTIVE PRACTICE"}, {"q": "Ano ang sinusukat ng Corruption Perceptions Index o CPI?", "options": ["Perceived level ng corruption sa pampublikong sektor", "Eksaktong bilang ng lahat ng graft cases", "Kabuuang budget ng mga ahensiya", "Dami ng empleyado sa pamahalaan"], "answer": "Perceived level ng corruption sa pampublikong sektor", "activity": "INTERACTIVE PRACTICE"}], "final": [{"q": "Tumanggap ang isang opisyal ng pera mula sa supplier matapos aprubahan ang kontrata nito. Ipinakita ng records na siya mismo ang may kapangyarihang magpasya sa transaksiyon. Ano ang pinakamatibay na pagsusuri?", "options": ["Corruption ito dahil ginamit ang opisyal na kapangyarihan sa kuwestiyonableng transaksiyon.", "Graft at corruption ito dahil iniugnay ang opisyal na pasiya sa personal na pakinabang.", "Corruption ito dahil may supplier na nagbigay ng pera matapos aprobahan ang kontrata.", "Graft ito dahil may perang natanggap mula sa partidong nakinabang sa transaksiyon."], "answer": "Graft at corruption ito dahil iniugnay ang opisyal na pasiya sa personal na pakinabang.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Ibinigay ng isang opisyal ang kompidensiyal na impormasyon sa kakilala upang mapaganda nito ang bid. Walang ebidensiyang tumanggap ng pera o materyal na pakinabang ang opisyal. Ano ang pinakamakatuwirang pagsusuri?", "options": ["Graft at corruption ito dahil nakinabang ang kakilala sa opisyal na impormasyon.", "Corruption ito dahil ginamit ang impormasyon upang magbigay ng hindi nararapat na pabor.", "Graft ito dahil nagkaroon ng kalamangan ang pribadong partido sa bidding.", "Corruption ito dahil inilabas ang impormasyon bago matapos ang opisyal na transaksiyon."], "answer": "Corruption ito dahil ginamit ang impormasyon upang magbigay ng hindi nararapat na pabor.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Ginamit ng isang opisyal ang pampublikong pondo upang bayaran ang personal na bakasyon ng pamilya. Ano ang pinakamatibay na pagsusuri?", "options": ["Corruption ito dahil inilaan ang pampublikong pondo sa gastusing walang pahintulot.", "Graft ito dahil nakinabang ang pamilya sa pondong nagmula sa pamahalaan.", "Graft at corruption ito dahil ginamit ang pampublikong pondo sa personal na pakinabang.", "Corruption ito dahil hindi tumugma ang aktuwal na gastos sa layunin ng pondo."], "answer": "Graft at corruption ito dahil ginamit ang pampublikong pondo sa personal na pakinabang.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Nagkasundo ang dalawang opisyal na baguhin ang proseso upang mapaboran ang isang pribadong partido. Walang natukoy na personal o materyal na pakinabang para sa dalawang opisyal. Ano ang pinakaangkop na pagsusuri?", "options": ["Graft ito dahil nagbigay ang mga opisyal ng hindi nararapat na pabor sa pribadong partido.", "Corruption ito dahil may sinadyang sabwatan upang manipulahin ang opisyal na proseso.", "Graft at corruption ito dahil ginamit ng dalawang opisyal ang kanilang kapangyarihan.", "Corruption ito dahil may pribadong partidong nakinabang sa binagong opisyal na proseso."], "answer": "Corruption ito dahil may sinadyang sabwatan upang manipulahin ang opisyal na proseso.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Mababa ang iskor ng isang bansa sa Corruption Perceptions Index o CPI. Alin ang pinakamaingat na interpretasyon?", "options": ["Mataas ang nakikitang corruption, ngunit hindi nito tinutukoy ang dami ng mga opisyal na sangkot.", "Mataas ang naitalang corruption, ngunit hindi nito saklaw ang lahat ng transaksiyon ng pamahalaan.", "Mataas ang nakikitang corruption, ngunit hindi nito binibilang ang lahat ng aktuwal na kaso.", "Mataas ang napatunayang corruption, ngunit hindi nito ipinakikita ang uri ng bawat paglabag."], "answer": "Mataas ang nakikitang corruption, ngunit hindi nito binibilang ang lahat ng aktuwal na kaso.", "activity": "FINAL 5 • ASSESSMENT"}]}, "d2": {"short": "Sesyon 2", "title": "Ang Anti-Graft and Corrupt Practices Act", "youtube": "https://youtu.be/Pyi8KEE-PKQ", "practice": [{"q": "Anong batas ang kilala bilang \"Anti-Graft and Corrupt Practices Act\"?", "options": ["Republic Act No. 3019", "Republic Act No. 6713", "Executive Order No. 43, s. 2011", "Ombudsman Act"], "answer": "Republic Act No. 3019", "activity": "INTERACTIVE PRACTICE"}, {"q": "Anong pangunahing prinsipyo ang binibigyang-diin ng Section 1 ng RA 3019?", "options": ["Public office is a public trust", "All contracts must be privatized", "Every official act is presumed corrupt", "Public officers may favor relatives if qualified"], "answer": "Public office is a public trust", "activity": "INTERACTIVE PRACTICE"}, {"q": "Aling section ng RA 3019 ang tumutukoy sa pag-impluwensiya sa kapuwa opisyal na lumabag sa tuntunin?", "options": ["Section 3(a)", "Section 3(c)", "Section 3(g)", "Section 4(a)"], "answer": "Section 3(a)", "activity": "INTERACTIVE PRACTICE"}, {"q": "Aling section ang may kaugnayan sa paghingi o pagtanggap ng regalo o benepisyo kaugnay ng kontrata o transaksiyon ng pamahalaan?", "options": ["Section 3(b)", "Section 3(k)", "Section 3(j)", "Section 3(h)"], "answer": "Section 3(b)", "activity": "INTERACTIVE PRACTICE"}, {"q": "Aling section ang sumasaklaw sa paghingi ng benepisyo kapalit ng tulong sa pagkuha ng permit o lisensiya?", "options": ["Section 3(c)", "Section 3(f)", "Section 3(i)", "Section 4(a)"], "answer": "Section 3(c)", "activity": "INTERACTIVE PRACTICE"}, {"q": "Aling section ang tumutukoy sa sadyang hindi pagkilos upang makakuha o makapagbigay ng pakinabang?", "options": ["Section 3(f)", "Section 3(g)", "Section 3(b)", "Section 3(j)"], "answer": "Section 3(f)", "activity": "INTERACTIVE PRACTICE"}, {"q": "Aling section ang may kinalaman sa kontratang hayagan at lubhang dehado ang pamahalaan?", "options": ["Section 3(g)", "Section 3(e)", "Section 3(k)", "Section 4(a)"], "answer": "Section 3(g)", "activity": "INTERACTIVE PRACTICE"}, {"q": "Aling section ang tumutukoy sa personal o materyal na interes sa pag-apruba ng opisyal na transaksiyon?", "options": ["Section 3(i)", "Section 3(a)", "Section 3(c)", "Section 3(f)"], "answer": "Section 3(i)", "activity": "INTERACTIVE PRACTICE"}, {"q": "Aling section ang may kaugnayan sa pagbubunyag ng kompidensiyal na impormasyon?", "options": ["Section 3(k)", "Section 3(j)", "Section 3(h)", "Section 3(e)"], "answer": "Section 3(k)", "activity": "INTERACTIVE PRACTICE"}, {"q": "Anong probisyon ang sumasaklaw sa private individuals na gumagamit ng pampamilya o malapit na personal na relasyon upang humingi o tumanggap ng pakinabang?", "options": ["Section 4(a)", "Section 3(a)", "Section 3(h)", "Section 3(i)"], "answer": "Section 4(a)", "activity": "INTERACTIVE PRACTICE"}], "final": [{"q": "Hinimok ng isang pampublikong opisyal ang kapuwa opisyal na aprubahan ang kilos na labag sa umiiral na tuntunin. Walang regalong natanggap o hiniling. Aling pagsusuri ang may pinakamatibay na batayan?", "options": ["May Section 3(e) concern dahil maaaring magdulot ng pinsala ang kuwestiyonableng pag-apruba.", "May Section 3(f) concern dahil hindi naisagawa nang wasto ang hinihinging opisyal na pagkilos.", "May Section 3(g) concern dahil maaaring maging dehado ang pamahalaan sa ginawang pasiya.", "May Section 3(a) concern dahil ginamit ang impluwensiya upang mahikayat ang kapuwa opisyal."], "answer": "May Section 3(a) concern dahil ginamit ang impluwensiya upang mahikayat ang kapuwa opisyal.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Tinulungan ng isang pampublikong opisyal ang aplikante na makakuha ng permit mula sa pamahalaan. Pagkatapos, humingi siya ng materyal na benepisyo bilang kapalit ng tulong. Aling pagsusuri ang pinakatiyak batay sa ipinakitang ebidensiya?", "options": ["May Section 3(c) concern dahil ang benepisyo ay kapalit ng tulong sa pagkuha ng permit.", "May Section 3(b) concern dahil ang benepisyo ay kaugnay ng transaksiyong pinangasiwaan ng opisyal.", "May Section 3(e) concern dahil nabigyan ng bentaha ang aplikanteng humingi ng opisyal na tulong.", "May Section 3(j) concern dahil may permit na ipinagkaloob sa aplikanteng nakinabang sa tulong."], "answer": "May Section 3(c) concern dahil ang benepisyo ay kapalit ng tulong sa pagkuha ng permit.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Sa pagsasagawa ng opisyal na tungkulin, pinaboran ng isang opisyal ang kompanya ng kaniyang kaibigan kahit mas kuwalipikado ang ibang kalahok sa transaksiyon. Aling detalye ang nagbibigay ng pinakamatibay na legal na batayan?", "options": ["May Section 3(b) concern dahil may pribadong kompanyang nakinabang sa opisyal na transaksiyon.", "May Section 3(e) concern dahil may hindi nararapat na pabor na ibinigay sa pamamagitan ng pagkiling.", "May Section 3(g) concern dahil maaaring maging dehado sa pamahalaan ang napiling transaksiyon.", "May Section 3(h) concern dahil maaaring magpahiwatig ng pribadong interes ang kanilang ugnayan."], "answer": "May Section 3(e) concern dahil may hindi nararapat na pabor na ibinigay sa pamamagitan ng pagkiling.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Matapos ang pormal na kahilingan, hindi inaksyunan ng isang opisyal ang kumpletong aplikasyon. Ipinahiwatig niyang kikilos lamang kapag may ibinigay na materyal na benepisyo. Aling pagsusuri ang sumasaklaw sa lahat ng mahalagang detalye?", "options": ["May Section 3(b) concern dahil may hinihinging benepisyo na kaugnay ng transaksiyon sa pamahalaan.", "May Section 3(c) concern dahil maaaring permit o lisensiya ang hinihingi ng interesadong aplikante.", "May Section 3(e) concern dahil maaaring magdulot ng hindi nararapat na pinsala ang pagkaantala.", "May Section 3(f) concern dahil sadyang hindi kumilos upang makakuha ng materyal na pakinabang."], "answer": "May Section 3(f) concern dahil sadyang hindi kumilos upang makakuha ng materyal na pakinabang.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Ginamit ng malapit na kaibigan ng isang pampublikong opisyal ang kanilang relasyon upang humingi ng materyal na pakinabang sa negosyanteng may transaksiyong kailangang aksiyunan ng opisyal. Aling pagsusuri ang pinakatiyak batay sa taong kumilos at paraang ginamit?", "options": ["May Section 3(b) concern dahil may materyal na pakinabang na kaugnay ng transaksiyon sa pamahalaan.", "May Section 4(a) concern dahil ginamit ang malapit na relasyon upang humingi ng pakinabang sa negosyante.", "May Section 3(c) concern dahil may pribadong indibidwal na humingi ng benepisyo sa interesadong partido.", "May Section 3(i) concern dahil maaaring magkaroon ng pakinabang mula sa gagawing opisyal na pag-apruba."], "answer": "May Section 4(a) concern dahil ginamit ang malapit na relasyon upang humingi ng pakinabang sa negosyante.", "activity": "FINAL 5 • ASSESSMENT"}]}, "d3": {"short": "Sesyon 3", "title": "Graft and Corruption sa Pilipinas", "youtube": "https://youtu.be/8CdaTWHQL6c", "practice": [{"q": "Ano ang buong pangalan ng CPI?", "options": ["Corruption Perceptions Index", "Corruption Prevention Initiative", "Citizen Performance Indicator", "Corrupt Practices Inventory"], "answer": "Corruption Perceptions Index", "activity": "INTERACTIVE PRACTICE"}, {"q": "Sino ang naglalabas ng Corruption Perceptions Index?", "options": ["Transparency International", "Sandiganbayan", "Commission on Audit", "Ombudsman"], "answer": "Transparency International", "activity": "INTERACTIVE PRACTICE"}, {"q": "Kailan unang inilunsad ang CPI?", "options": ["1995", "1987", "2001", "2010"], "answer": "1995", "activity": "INTERACTIVE PRACTICE"}, {"q": "Ano ang CPI score ng Pilipinas noong 2025?", "options": ["32/100", "33/100", "34/100", "120/182"], "answer": "32/100", "activity": "INTERACTIVE PRACTICE"}, {"q": "Ano ang pandaigdigang puwesto ng Pilipinas noong 2025 sa CPI?", "options": ["Ika-120 sa 182 bansa at teritoryo", "Ika-114 sa 182 bansa at teritoryo", "Ika-99 sa 180 bansa at teritoryo", "Ika-85 sa 175 bansa at teritoryo"], "answer": "Ika-120 sa 182 bansa at teritoryo", "activity": "INTERACTIVE PRACTICE"}, {"q": "Aling bansa ang may pinakamataas na CPI score sa Timog-Silangang Asya noong 2025?", "options": ["Singapore", "Brunei Darussalam", "Malaysia", "Thailand"], "answer": "Singapore", "activity": "INTERACTIVE PRACTICE"}, {"q": "Sa TI-WA-LA, ano ang kahulugan ng \"TI\"?", "options": ["Tingnan ang datos", "Tiwala sa lahat ng ulat", "Tukuyin ang tao", "Tantsahin ang iskor"], "answer": "Tingnan ang datos", "activity": "INTERACTIVE PRACTICE"}, {"q": "Sa TI-WA-LA, ano ang kahulugan ng \"WA\"?", "options": ["Wastong pagpapakahulugan", "Walong antas ng aksiyon", "Wakas ng pag-aaral", "Wastong awtoridad"], "answer": "Wastong pagpapakahulugan", "activity": "INTERACTIVE PRACTICE"}, {"q": "Sa TI-WA-LA, ano ang kahulugan ng \"LA\"?", "options": ["Lapatan ng angkop na pagkilos", "Laging alalahanin ang batas", "Lahatin ang datos", "Lumayo sa paghahambing"], "answer": "Lapatan ng angkop na pagkilos", "activity": "INTERACTIVE PRACTICE"}, {"q": "Alin ang wastong paglalarawan sa CPI?", "options": ["Sinusukat nito ang perceived corruption sa pampublikong sektor, hindi ang eksaktong bilang ng lahat ng aktuwal na kaso.", "Direkta nitong binibilang ang lahat ng graft cases sa bawat bansa.", "Sinusukat nito ang corruption sa public at private sector sa iisang bilang.", "Tinutukoy nito kung sinu-sinong opisyal ang sangkot sa katiwalian."], "answer": "Sinusukat nito ang perceived corruption sa pampublikong sektor, hindi ang eksaktong bilang ng lahat ng aktuwal na kaso.", "activity": "INTERACTIVE PRACTICE"}], "final": [{"q": "Noong 2025, nakakuha ang Pilipinas ng 32/100 at pumuwesto sa ika-120 sa 182 bansa at teritoryo. Sinabi ng isang post na pinatutunayan nitong karamihan sa mga public officer ay sangkot sa corruption. Aling pagsusuri ang pinakatiyak?", "options": ["Ipinapakita ng mababang score na malawak ang perceived corruption kaya maaaring iugnay ito sa karamihan ng public officer.", "Ipinapakita ng rank na mababa ang puwesto ng bansa kaya maaaring ipalagay na marami ang opisyal na sangkot.", "Ipinapakita ng CPI ang perceived public-sector corruption ngunit hindi nito tinutukoy kung sinu-sinong opisyal ang nagkasala.", "Ipinapakita ng CPI ang kalagayan ng public sector ngunit kailangan pa ng mas maraming datos upang matukoy ang bilang ng mga opisyal na sangkot."], "answer": "Ipinapakita ng CPI ang perceived public-sector corruption ngunit hindi nito tinutukoy kung sinu-sinong opisyal ang nagkasala.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Noong 2024, 33/100 ang score ng Pilipinas at ika-114 ang rank; noong 2025, naging 32/100 at ika-120. Aling pagsusuri ang pinakakumpleto?", "options": ["Parehong score at rank ang nagpapakitang naging mas mahina ang resulta ng Pilipinas noong 2025 kaysa noong 2024.", "Mas mahalaga ang pagbaba ng score dahil ito ang mas direktang indicator ng perceived public-sector corruption kaysa rank.", "Mas mahalaga ang pagbaba ng rank dahil ito ang mas malinaw na paghahambing ng Pilipinas sa ibang bansang kasama.", "Kailangang tingnan ang score at rank nang magkasama dahil magkaiba ang impormasyong ipinakikita ng bawat isa."], "answer": "Kailangang tingnan ang score at rank nang magkasama dahil magkaiba ang impormasyong ipinakikita ng bawat isa.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Parehong 33/100 ang CPI score ng Pilipinas noong 2021 at 2022, ngunit magkaiba ang rank nito sa dalawang taon. Aling pagsusuri ang pinakamatibay?", "options": ["Maaaring pareho ang score ngunit magkaiba ang rank dahil comparative ang puwesto sa ibang bansang kasama.", "Maaaring pareho ang score ngunit magkaiba ang rank dahil nagbabago ang paraan ng pagkuwenta ng CPI bawat taon.", "Maaaring pareho ang score ngunit magkaiba ang rank dahil mas mahalaga ang rank kaysa score sa pagsusuri.", "Maaaring pareho ang score ngunit magkaiba ang rank dahil hindi maaaring paghambingin ang dalawang taon."], "answer": "Maaaring pareho ang score ngunit magkaiba ang rank dahil comparative ang puwesto sa ibang bansang kasama.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Mula 2014 hanggang 2025, bumaba ang CPI score ng Pilipinas mula 38/100 tungong 32/100. Aling pagsusuri ang pinakamatibay?", "options": ["Ipinapakita nito na mas mataas ang perceived public-sector corruption noong 2025 kaysa noong 2014.", "Ipinapakita nito na mas maraming napatunayang corruption cases noong 2025 kaysa noong 2014.", "Ipinapakita nito na mas mababa ang puwesto ng Pilipinas sa lahat ng intervening years.", "Ipinapakita nito na tuluy-tuloy ang pagbaba ng score sa bawat taon mula 2014 hanggang 2025."], "answer": "Ipinapakita nito na mas mataas ang perceived public-sector corruption noong 2025 kaysa noong 2014.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "May nagsabi na dahil perception-based ang CPI, hindi ito dapat gamitin sa pagsusuri ng corruption. Aling pagsusuri ang pinakakumpleto?", "options": ["Maaari pa rin itong gamitin dahil pinagsasama nito ang assessments ng experts at businesspeople tungkol sa public-sector corruption.", "Maaari pa rin itong gamitin dahil pinapalitan nito ang official records ng aktuwal na corruption cases sa bawat bansa.", "Maaari pa rin itong gamitin dahil direktang sinusukat nito ang lahat ng uri ng corruption sa public at private sector.", "Maaari pa rin itong gamitin dahil ang perception score ay katumbas ng bilang ng napatunayang kaso sa bawat bansa."], "answer": "Maaari pa rin itong gamitin dahil pinagsasama nito ang assessments ng experts at businesspeople tungkol sa public-sector corruption.", "activity": "FINAL 5 • ASSESSMENT"}]}, "d4": {"short": "Sesyon 4", "title": "Epekto ng Graft and Corruption", "youtube": "https://youtu.be/_0hCqtaxuu4", "practice": [{"q": "Sa acronym na EPEKTO, ano ang kahulugan ng unang “E”?", "options": ["Edukasyon", "Ekonomiya", "Ebidensiya", "Empleyo"], "answer": "Edukasyon", "activity": "INTERACTIVE PRACTICE"}, {"q": "Ano ang kahulugan ng “P” sa EPEKTO?", "options": ["Pabahay at Imprastraktura", "Paglilitis at Imbestigasyon", "Pangangalakal at Industriya", "Pagpaplano at Implementasyon"], "answer": "Pabahay at Imprastraktura", "activity": "INTERACTIVE PRACTICE"}, {"q": "Ano ang kahulugan ng ikalawang “E” sa EPEKTO?", "options": ["Epektibong Pagtugon sa Kalamidad", "Epektibong Pangongolekta ng Buwis", "Eksaktong Pagtaya sa Pondo", "Edukasyong Pangkolehiyo"], "answer": "Epektibong Pagtugon sa Kalamidad", "activity": "INTERACTIVE PRACTICE"}, {"q": "Ano ang kahulugan ng “K” sa EPEKTO?", "options": ["Kalusugan at Nutrisyon", "Katarungan at Kaayusan", "Kapaligiran at Kalinisan", "Kakayahan at Kasanayan"], "answer": "Kalusugan at Nutrisyon", "activity": "INTERACTIVE PRACTICE"}, {"q": "Ano ang kahulugan ng “T” sa EPEKTO?", "options": ["Tapat at Pantay na Serbisyo", "Tuloy-tuloy na Trabaho", "Tapat na Transaksiyon", "Tiyak na Target"], "answer": "Tapat at Pantay na Serbisyo", "activity": "INTERACTIVE PRACTICE"}, {"q": "Ano ang kahulugan ng “O” sa EPEKTO?", "options": ["Operasyong Pangseguridad", "Oras ng Pagproseso", "Opisyal na Pagsusuri", "Organisadong Pagbabantay"], "answer": "Operasyong Pangseguridad", "activity": "INTERACTIVE PRACTICE"}, {"q": "Ano ang pinakamahalagang ideya ng EPEKTO framework?", "options": ["Hindi lamang pera ang nawawala; may serbisyo, oportunidad, proteksiyon, at tiwalang maaaring hindi makarating sa mamamayan.", "Ang tanging epekto ng graft ay pagbaba ng kita ng pamahalaan.", "Magkakapareho ang epekto ng lahat ng kaso sa bawat sektor.", "Ang epekto ay nasusukat lamang sa halagang nailihis."], "answer": "Hindi lamang pera ang nawawala; may serbisyo, oportunidad, proteksiyon, at tiwalang maaaring hindi makarating sa mamamayan.", "activity": "INTERACTIVE PRACTICE"}, {"q": "Kapag pondong para sa sahod ng mga guro ang nagamit sa maling paraan, anong sektor ang tuwirang naaapektuhan?", "options": ["Edukasyon", "Kalusugan at Nutrisyon", "Operasyong Pangseguridad", "Pabahay at Imprastraktura"], "answer": "Edukasyon", "activity": "INTERACTIVE PRACTICE"}, {"q": "Kapag may irregularidad sa pondong para sa mga gamot at medical supplies, aling larangan ang higit na naaapektuhan?", "options": ["Kalusugan at Nutrisyon", "Tapat at Pantay na Serbisyo", "Epektibong Pagtugon sa Kalamidad", "Operasyong Pangseguridad"], "answer": "Kalusugan at Nutrisyon", "activity": "INTERACTIVE PRACTICE"}, {"q": "Kapag may lagay at pabor sa pagproseso ng dokumento, anong larangan ng EPEKTO ang malinaw na naaapektuhan?", "options": ["Tapat at Pantay na Serbisyo", "Pabahay at Imprastraktura", "Edukasyon", "Operasyong Pangseguridad"], "answer": "Tapat at Pantay na Serbisyo", "activity": "INTERACTIVE PRACTICE"}], "final": [{"q": "May pondong nakalaan para sa 22 farm-to-market roads na nasangkot sa kasong graft at malversation. Aling pagsusuri ang pinakamatibay batay sa detalye?", "options": ["Maaaring maapektuhan ang accounting records, pag-liquidate ng pondo, at dokumentasyon ng mga proyektong inilaan.", "Maaaring maapektuhan ang construction sector, mga contractor, at iskedyul ng paggawa sa mga proyektong inilaan.", "Maaaring maapektuhan ang pagpunta sa pamilihan, kabuhayan, serbisyo, at paggalaw ng mga komunidad.", "Maaaring maapektuhan ang dami ng sasakyan, haba ng biyahe, at paggamit sa bawat kalsadang inilaan."], "answer": "Maaaring maapektuhan ang pagpunta sa pamilihan, kabuhayan, serbisyo, at paggalaw ng mga komunidad.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Dalawang mamamayan ang may parehong kumpletong requirements. Ang isa ay naghintay sa regular na proseso, samantalang ang isa ay nagbigay ng lagay upang mauna. Aling pagsusuri ang pinakatiyak?", "options": ["Bumilis ang transaksiyon, ngunit nasira ang pagiging patas dahil hindi pareho ang prosesong dinaanan.", "Bumilis ang transaksiyon, ngunit naging maayos ang serbisyo dahil nabawasan ang bilang ng naghihintay.", "Nagkaroon ng pabor, ngunit nanatiling patas ang serbisyo dahil kapwa natapos ang kanilang transaksiyon.", "Nagkaroon ng problema, ngunit nanatili ang tiwala dahil kapwa natanggap ang serbisyong kailangan."], "answer": "Bumilis ang transaksiyon, ngunit nasira ang pagiging patas dahil hindi pareho ang prosesong dinaanan.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "May relief goods na hindi agad naipamahagi pagkatapos ng isang malakas na kalamidad. Ang ilan sa mga ito ay nasira habang nakaimbak. Alin ang pinakakumpletong interpretasyon?", "options": ["Ang pagkawala ay nasa halaga ng mga nasirang produkto at gastusin sa pagbili ng mga relief goods.", "Ang pagkawala ay nasa oras ng mga tauhan at pagsisikap na inilaan sa paghahanda ng relief goods.", "Ang pagkawala ay nasa dami ng supply at espasyong ginamit sa matagal na pag-iimbak ng relief goods.", "Ang pagkawala ay nasa supply na nasayang at tulong na hindi napakinabangan ng mga pamilyang nangangailangan."], "answer": "Ang pagkawala ay nasa supply na nasayang at tulong na hindi napakinabangan ng mga pamilyang nangangailangan.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Sa isang proyekto, nawala ang pondong para sa silid-aralan. Sa isa pang proyekto, nagkaroon ng irregularidad sa pondong para sa gamot. Aling pagsusuri ang pinakatiyak?", "options": ["Magkaiba ang sektor, ngunit parehong maaaring mabawasan ang serbisyong direktang kailangan ng mga mamamayan.", "Magkaiba ang sektor, kaya hindi maaaring paghambingin ang epekto ng dalawang uri ng katiwalian.", "Magkaiba ang sektor, ngunit tiyak na pareho ang bilang ng mga mamamayang direktang maaapektuhan.", "Magkaiba ang sektor, ngunit tiyak na pareho ang legal na uri ng paglabag sa dalawang proyekto."], "answer": "Magkaiba ang sektor, ngunit parehong maaaring mabawasan ang serbisyong direktang kailangan ng mga mamamayan.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Sinabi ng isang pangkat, “Kapag may graft and corruption, pamahalaan lamang ang nawawalan dahil pamahalaan naman ang may hawak ng pondong pampubliko.” Ang pondong ito ay inilaan sana sa mga paaralan, ospital, kalsada, pabahay, seguridad, at iba pang serbisyo. Aling pagsusuri ang pinakakumpleto?", "options": ["Ang pamahalaan ang naaapektuhan dahil kailangang itama ang mga tala at palitan ang pondong nailihis.", "Ang ahensiya ang naaapektuhan dahil nasisira ang reputasyon at tiwala sa pamamahala nito.", "Ang mga kawani ang naaapektuhan dahil maaari silang maimbestigahan at papanagutin sa maling paggamit.", "Ang mamamayan ang naaapektuhan dahil ang pondong nailihis ay serbisyong hindi nila natatanggap."], "answer": "Ang mamamayan ang naaapektuhan dahil ang pondong nailihis ay serbisyong hindi nila natatanggap.", "activity": "FINAL 5 • ASSESSMENT"}]}, "d5": {"short": "Sesyon 5", "title": "Paglutas sa Graft and Corruption", "youtube": "", "practice": [{"q": "Anong prinsipyo ang tumutukoy sa pagiging malinaw at nasusundan ng impormasyon at transaksiyon?", "options": ["Transparency", "Prevention", "Accountability", "Red tape"], "answer": "Transparency", "activity": "INTERACTIVE PRACTICE"}, {"q": "Anong prinsipyo ang nag-aayos ng proseso upang mabawasan ang pagkakataon sa graft and corruption?", "options": ["Prevention", "Transparency", "Accountability", "Collusion"], "answer": "Prevention", "activity": "INTERACTIVE PRACTICE"}, {"q": "Anong prinsipyo ang tumutukoy sa pananagutan at kaukulang aksiyon kapag may napatunayang paglabag?", "options": ["Accountability", "Prevention", "Transparency", "Nepotismo"], "answer": "Accountability", "activity": "INTERACTIVE PRACTICE"}, {"q": "Anong batas ang nagtatakda ng Code of Conduct and Ethical Standards para sa mga pampublikong opisyal at kawani?", "options": ["Republic Act No. 6713", "Republic Act No. 3019", "Executive Order No. 43, s. 2011", "Ombudsman Act"], "answer": "Republic Act No. 6713", "activity": "INTERACTIVE PRACTICE"}, {"q": "Anong kautusan ang nagbigay ng direksiyon sa pamamahala sa pamamagitan ng reorganisasyon ng Cabinet clusters at pagtataguyod ng pamamahalang tapat at may integridad?", "options": ["Executive Order No. 43, s. 2011", "Republic Act No. 6713", "Republic Act No. 3019", "Executive Order No. 2"], "answer": "Executive Order No. 43, s. 2011", "activity": "INTERACTIVE PRACTICE"}, {"q": "Ano ang FAiTH?", "options": ["Foreign Aid Transparency Hub", "Framework for Accountability in Transparent Handling", "Fund Allocation and Integrity Tracking Hub", "Fiscal Audit in the Treasury Headquarters"], "answer": "Foreign Aid Transparency Hub", "activity": "INTERACTIVE PRACTICE"}, {"q": "Anong programa ng DILG ang pinagsasama ang edukasyon, pag-iwas, at pagpigil sa corruption sa mga lokal na pamahalaan?", "options": ["Bantay Korapsyon", "Seal of Good Local Governance", "Open Government Partnership", "Integrity Circle"], "answer": "Bantay Korapsyon", "activity": "INTERACTIVE PRACTICE"}, {"q": "Ano ang red tape?", "options": ["Mabagal at masalimuot na proseso na maaaring magbukas ng pagkakataon sa lagay at pagpabor", "Ligtas na pagrereklamo laban sa katiwalian", "Digital system para sa online permits", "Opisyal na talaan ng foreign aid"], "answer": "Mabagal at masalimuot na proseso na maaaring magbukas ng pagkakataon sa lagay at pagpabor", "activity": "INTERACTIVE PRACTICE"}, {"q": "Sa permit process reform, alin ang halimbawa ng transparency?", "options": ["Malinaw na nakapaskil ang opisyal na bayarin, requirements, proseso, at takdang oras", "Pagtataas ng parusa nang walang malinaw na records", "Pagdaragdag ng maraming pirma sa bawat aplikasyon", "Pagtatago ng complaint records habang iniimbestigahan"], "answer": "Malinaw na nakapaskil ang opisyal na bayarin, requirements, proseso, at takdang oras", "activity": "INTERACTIVE PRACTICE"}, {"q": "Sa permit process reform, alin ang pinakamainam na halimbawa ng accountability?", "options": ["May malinaw at ligtas na complaint process, dokumentadong pagsusuri, at makatarungang aksiyon", "May online payment option at mas maikling pila", "May posters tungkol sa integridad sa mga dingding", "May dagdag na tauhan ngunit walang complaints procedure"], "answer": "May malinaw at ligtas na complaint process, dokumentadong pagsusuri, at makatarungang aksiyon", "activity": "INTERACTIVE PRACTICE"}], "final": [{"q": "Nagpanukala ang isang grupo na taasan ang sahod at benepisyo ng mga kawani upang mabawasan ang tukso sa paghingi ng lagay. Wala silang mungkahi tungkol sa records, proseso, reklamo, o pananagutan. Aling pagsusuri ang pinakakumpleto?", "options": ["May hakbang sa Prevention, ngunit kailangan pa rin ng Transparency at Accountability sa sistema.", "May sapat na tugon dahil mawawala ang dahilan ng paghingi ng lagay kapag tumaas ang sahod.", "May hakbang sa Accountability dahil may kapalit na benepisyo ang maayos na paglilingkod.", "May hakbang sa Transparency dahil malalaman ng publiko ang sahod at benepisyo ng kawani."], "answer": "May hakbang sa Prevention, ngunit kailangan pa rin ng Transparency at Accountability sa sistema.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Gumagamit ang MMDA ng No-Contact Apprehension Policy o NCAP, kung saan CCTV at digital records ang ginagamit sa pagtukoy ng traffic violations. Walang agarang harapang transaksiyon sa pagitan ng motorista at traffic enforcer, at maaaring tingnan at bayaran online ang naitalang violation. Alin ang pinakakumpletong pagsusuri?", "options": ["Pinatitibay nito ang Transparency dahil nagkakaroon ng digital record, ngunit wala itong epekto sa pagkakataon sa lagay.", "Pinatitibay nito ang Prevention dahil nababawasan ang personal na transaksiyon, ngunit hindi na kailangan ang malinaw na pag-apela.", "Pinatitibay nito ang Accountability dahil awtomatikong naparurusahan ang motorista, kahit walang pagsusuri sa violation.", "Pinatitibay nito ang Prevention at Transparency, ngunit kailangan pa rin ng malinaw na notice, pagsusuri, at paraan ng pag-apela."], "answer": "Pinatitibay nito ang Prevention at Transparency, ngunit kailangan pa rin ng malinaw na notice, pagsusuri, at paraan ng pag-apela.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Dinagdagan ng isang tanggapan ang bilang ng mga kawani upang mabawasan ang mahabang pila. Nanatili naman ang paulit-ulit na forms at hindi kailangang approval sa proseso. Aling pagsusuri ang pinakatiyak?", "options": ["Sapat ang dagdag na kawani dahil mas maraming taong makapoproseso sa parehong sistema.", "May hakbang sa Prevention, ngunit kailangan ding alisin ang hindi kailangang bahagi ng proseso.", "May hakbang sa Transparency, ngunit kailangan ding ipakita sa publiko ang pangalan ng mga kawani.", "May hakbang sa Accountability, ngunit kailangan ding parusahan ang mabagal magproseso ng dokumento."], "answer": "May hakbang sa Prevention, ngunit kailangan ding alisin ang hindi kailangang bahagi ng proseso.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Napansin ng isang magulang na magkaiba ang sinisingil sa dalawang taong kumuha ng parehong dokumento. Walang malinaw na fee schedule na nakapaskil, ngunit may opisyal na complaint desk ang tanggapan. Aling pagkilos ang pinakamatibay?", "options": ["Magtanong tungkol sa opisyal na bayarin, humingi ng resibo, at gamitin ang itinakdang proseso kung may hindi pagtutugma.", "Bayaran muna ang hinihinging halaga at magreklamo lamang kapag napatunayang mas mababa ang ibinayad ng iba.", "Kunan ng litrato ang mga kawani at ilathala agad ang alegasyon upang makakuha ng agarang paliwanag.", "Tanungin ang ibang aplikante kung magkano ang ibinayad at ituring na sapat na ebidensiya ang kanilang sagot."], "answer": "Magtanong tungkol sa opisyal na bayarin, humingi ng resibo, at gamitin ang itinakdang proseso kung may hindi pagtutugma.", "activity": "FINAL 5 • ASSESSMENT"}, {"q": "Magkakahiwalay ang mga programa ng iba’t ibang tanggapan laban sa corruption kaya nagkakaroon ng kalituhan sa direksiyon at koordinasyon. Iminungkahing gamiting gabay ang Executive Order No. 43, s. 2011. Aling pagsusuri ang pinakakumpleto?", "options": ["Makabubuti ang EO No. 43 dahil nagtatakda ito ng parusa sa bawat kawani na mapatutunayang lumabag.", "Makabubuti ang EO No. 43 dahil nagbibigay ito ng direksiyon at koordinasyon sa pamamahala at mga institusyon.", "Makabubuti ang EO No. 43 dahil naglalabas ito ng resibo at digital record sa bawat transaksiyon.", "Makabubuti ang EO No. 43 dahil tumatanggap ito ng mga reklamo laban sa mga lokal na opisyal."], "answer": "Makabubuti ang EO No. 43 dahil nagbibigay ito ng direksiyon at koordinasyon sa pamamahala at mga institusyon.", "activity": "FINAL 5 • ASSESSMENT"}]}}};
+var STORAGE_KEY="ap10_week1_interactive_v1",NAME_KEY="ap10_week1_name_v1",LETTERS=["A","B","C","D"];
+var appState=loadState(),current=null,ticker=null;
+
+function byId(x){return document.getElementById(x)}
+function loadState(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{records:{}}}catch(e){return{records:{}}}}
+function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(appState))}
+function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function fmt(sec){sec=Math.max(0,Math.round(sec||0));var h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;return h?h+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0"):String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
+function pct(a,b){return b?Math.round(a/b*100):0}
+function show(id){["home","quiz","result","dashboard"].forEach(function(x){byId(x).classList.toggle("hidden",x!==id)});window.scrollTo(0,0)}
+function key(day){return day+":session"}function rec(day){return appState.records[key(day)]||null}
+function saveName(){localStorage.setItem(NAME_KEY,byId("studentName").value.trim())}function getName(){return localStorage.getItem(NAME_KEY)||""}
+function normalized(q,origin,phase){return{q:q.q,answer:q.answer,options:shuffle(q.options),origin:origin,phase:phase,activity:q.activity||phase}}
+
+function startSession(day){
+ var d=DATA.days[day];
+ var practice=shuffle(d.practice).map(function(q){return normalized(q,day,"INTERACTIVE PRACTICE")});
+ var final=d.final.map(function(q){return normalized(q,day,"FINAL 5 • ASSESSMENT")});
+ startQuiz(practice.concat(final),day,d);
+}
+function startQuiz(items,day,d){
+ clearInterval(ticker);
+ current={day:day,items:items,index:0,score:0,wrong:[],started:Date.now(),itemStarted:Date.now(),title:d.title};
+ byId("quizBadge").textContent=d.short+" • INTERACTIVE PRACTICE";
+ byId("quizTitle").textContent=d.title;
+ show("quiz");renderQuestion();ticker=setInterval(updateTimers,500);updateTimers();
+}
+function updateTimers(){
+ if(!current)return;var now=Date.now();
+ byId("totalTimer").textContent=fmt((now-current.started)/1000);
+ byId("itemTimer").textContent=fmt((now-current.itemStarted)/1000)
+}
+function renderQuestion(){
+ var q=current.items[current.index],isFinal=q.phase.indexOf("FINAL 5")===0;
+ current.itemStarted=Date.now();
+ byId("progressBar").style.width=(current.index/current.items.length*100)+"%";
+ var opts=q.options.map(function(o,i){
+   return'<button class="opt" data-i="'+i+'"><span class="letter">'+LETTERS[i]+'</span><span>'+esc(o)+'</span></button>'
+ }).join("");
+ byId("questionArea").innerHTML=
+   '<div class="phase"><span class="badge '+(isFinal?'final':'')+'">'+esc(isFinal?q.phase:q.activity)+'</span></div>'+
+   '<div class="qnum">Tanong '+(current.index+1)+' / '+current.items.length+'</div>'+
+   '<div class="question">'+esc(q.q)+'</div>'+
+   '<div class="options">'+opts+'</div><div id="feedback"></div>'+
+   '<div class="row hidden" id="nextRow"><button class="btn" id="nextBtn">'+(current.index===current.items.length-1?'Tingnan ang Resulta':'Susunod')+'</button></div>';
+ Array.prototype.forEach.call(document.querySelectorAll(".opt"),function(b){
+   b.addEventListener("click",function(){choose(parseInt(b.getAttribute("data-i"),10))})
+ });
+ byId("nextBtn").addEventListener("click",next);
+}
+function choose(i){
+ var q=current.items[current.index],chosen=q.options[i],sec=(Date.now()-current.itemStarted)/1000,ok=chosen===q.answer;
+ if(ok)current.score++;else current.wrong.push({q:q.q,chosen:chosen,answer:q.answer,time:sec,phase:q.phase,activity:q.activity});
+ Array.prototype.forEach.call(document.querySelectorAll(".opt"),function(b,n){
+   b.disabled=true;var v=q.options[n];
+   if(v===q.answer)b.classList.add("correct");
+   if(n===i&&v!==q.answer)b.classList.add("wrong")
+ });
+ var f=byId("feedback");f.className="feedback "+(ok?"ok":"no");
+ f.innerHTML=ok?"✓ Tama!":"✗ Hindi tama. Tamang sagot: <strong>"+esc(q.answer)+"</strong>";
+ byId("nextRow").classList.remove("hidden");
+}
+function next(){if(current.index<current.items.length-1){current.index++;renderQuestion()}else finish()}
+function finish(){
+ clearInterval(ticker);
+ var sec=(Date.now()-current.started)/1000,total=current.items.length,acc=pct(current.score,total),k=key(current.day);
+ var old=appState.records[k]||{attempts:0,totalScore:0,totalItems:0,bestScore:0,bestTotal:total,totalTime:0};
+ var oldBest=old.attempts?pct(old.bestScore,old.bestTotal):-1;
+ appState.records[k]={
+   attempts:(old.attempts||0)+1,totalScore:(old.totalScore||0)+current.score,totalItems:(old.totalItems||0)+total,
+   bestScore:acc>=oldBest?current.score:old.bestScore,bestTotal:acc>=oldBest?total:old.bestTotal,
+   latestScore:current.score,latestTotal:total,latestAccuracy:acc,totalTime:(old.totalTime||0)+sec,
+   latestTime:sec,latestWrong:current.wrong,latestDate:new Date().toISOString()
+ };
+ saveState();
+ byId("resultTitle").textContent=current.title;byId("score").textContent=current.score+" / "+total;
+ byId("metrics").innerHTML=
+   '<span class="metric"><strong>'+acc+'%</strong> accuracy</span>'+
+   '<span class="metric"><strong>'+fmt(sec)+'</strong> oras</span>'+
+   '<span class="metric"><strong>'+current.wrong.length+'</strong> mali</span>';
+ renderMistakes();byId("mistakesBtn").disabled=current.wrong.length===0;updateStatuses();show("result");
+}
+function renderMistakes(){
+ if(!current.wrong.length){byId("mistakes").innerHTML='<div class="note"><strong>Perfect!</strong> Walang maling sagot.</div>';return}
+ byId("mistakes").innerHTML='<h3>Mga Kailangang Balikan</h3>'+current.wrong.map(function(w,i){
+   return'<div class="mistake"><strong>'+(i+1)+'. '+esc(w.q)+'</strong><br>'+
+     'Sagot: '+esc(w.chosen)+'<br>Tamang sagot: <strong>'+esc(w.answer)+'</strong><br>'+
+     '<span style="font-size:.84rem;color:#6b746f">'+esc(w.activity||w.phase)+' • '+fmt(w.time)+'</span></div>'
+ }).join("");
+}
+function retryMistakes(){
+ if(!current||!current.wrong.length)return;
+ var d=DATA.days[current.day],pool=d.practice.concat(d.final);
+ var items=current.wrong.map(function(w){
+   var f=pool.find(function(q){return q.q===w.q&&q.answer===w.answer});
+   return normalized(f||{q:w.q,answer:w.answer,options:[w.answer,w.chosen,"HINDI SAPAT ANG DATOS","WALA SA MGA NABANGGIT"],activity:"ULITIN ANG MALI"},current.day,"ULITIN ANG MALI")
+ });
+ startQuiz(items,current.day,{short:d.short,title:"Ulitin ang Mali — "+d.title});
+}
+function updateStatuses(){
+ ["d1","d2","d3","d4","d5"].forEach(function(day){
+   var r=rec(day),el=byId("status-"+day);if(!el)return;
+   el.innerHTML=r
+     ?'Best: <strong>'+r.bestScore+'/'+r.bestTotal+'</strong> • Latest: <strong>'+r.latestScore+'/'+r.latestTotal+'</strong> • '+r.attempts+' attempt(s) • '+fmt(r.totalTime)+' total time'
+     :'Wala pang attempt.'
+ })
+}
+function showDashboard(){
+ byId("dashStudent").innerHTML='Mag-aaral: <strong>'+esc(getName()||"Hindi nakalagay")+'</strong>';
+ var ta=0,tt=0;
+ byId("dashRows").innerHTML=["d1","d2","d3","d4","d5"].map(function(day){
+   var d=DATA.days[day],r=rec(day);
+   if(!r)return'<tr><td>'+esc(d.short)+'<br><span style="font-size:.82rem;color:#6d756f">'+esc(d.title)+'</span></td><td>—</td><td>—</td><td>0</td><td>—</td><td>—</td><td>—</td><td><button class="btn dashPractice" data-day="'+day+'">Practice</button></td></tr>';
+   ta+=r.attempts||0;tt+=r.totalTime||0;
+   return'<tr><td>'+esc(d.short)+'<br><span style="font-size:.82rem;color:#6d756f">'+esc(d.title)+'</span></td>'+
+     '<td>'+r.latestScore+'/'+r.latestTotal+' ('+r.latestAccuracy+'%)</td>'+
+     '<td>'+r.bestScore+'/'+r.bestTotal+' ('+pct(r.bestScore,r.bestTotal)+'%)</td>'+
+     '<td>'+r.attempts+'</td><td>'+pct(r.totalScore,r.totalItems)+'%</td>'+
+     '<td>'+fmt(r.totalTime)+'</td><td>'+(r.latestWrong||[]).length+'</td>'+
+     '<td><button class="btn dashPractice" data-day="'+day+'">Practice</button></td></tr>'
+ }).join("");
+ byId("dashSummary").innerHTML='<strong>Buod:</strong> '+ta+' total attempt(s) • '+fmt(tt)+' kabuuang oras ng pag-aaral.';
+ Array.prototype.forEach.call(document.querySelectorAll(".dashPractice"),function(b){
+   b.addEventListener("click",function(){startSession(b.getAttribute("data-day"))})
+ });
+ show("dashboard");
+}
+function csv(){
+ var rows=[["Mag-aaral",getName()],[],["Sesyon","Latest","Best","Attempts","Average","Total Time","Mali"]];
+ ["d1","d2","d3","d4","d5"].forEach(function(day){
+   var d=DATA.days[day],r=rec(day);
+   rows.push(r?[d.short+" - "+d.title,r.latestScore+"/"+r.latestTotal,r.bestScore+"/"+r.bestTotal,r.attempts,pct(r.totalScore,r.totalItems)+"%",fmt(r.totalTime),(r.latestWrong||[]).length]:
+     [d.short+" - "+d.title,"","","0","","",""])
+ });
+ var content="\ufeff"+rows.map(function(row){return row.map(function(x){return'"'+String(x||"").replace(/"/g,'""')+'"'}).join(",")}).join("\n");
+ var blob=new Blob([content],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);a.download="AP10_Term2_Week2_Progress.csv";a.click()
+}
+function resetProgress(){
+ if(!confirm("Burahin ang lahat ng saved progress at oras sa browser na ito?"))return;
+ appState={records:{}};saveState();updateStatuses();showDashboard()
+}
+function home(){clearInterval(ticker);show("home");updateStatuses()}
+
+document.addEventListener("DOMContentLoaded",function(){
+ byId("studentName").value=getName();updateStatuses();
+ Array.prototype.forEach.call(document.querySelectorAll("[data-practice]"),function(a){
+   a.addEventListener("click",function(e){e.preventDefault();startSession(a.getAttribute("data-practice"))})
+ });
+ byId("saveNameBtn").addEventListener("click",saveName);
+ byId("dashboardBtn").addEventListener("click",showDashboard);
+ byId("homeFromQuiz").addEventListener("click",home);
+ byId("homeFromResult").addEventListener("click",home);
+ byId("homeFromDash").addEventListener("click",home);
+ byId("repeatBtn").addEventListener("click",function(){startSession(current.day)});
+ byId("mistakesBtn").addEventListener("click",retryMistakes);
+ byId("csvBtn").addEventListener("click",csv);
+ byId("resetBtn").addEventListener("click",resetProgress);
+});
+</script>
+</body>
+</html>
